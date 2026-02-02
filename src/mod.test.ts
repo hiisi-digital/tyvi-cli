@@ -2,13 +2,13 @@
  * Tests for CLI entry point
  */
 
-import { main, EXIT } from "./mod.ts";
+import { EXIT, main } from "./mod.ts";
 
 // Simple assertion helper
 function assertEquals<T>(actual: T, expected: T, message?: string): void {
   if (actual !== expected) {
     throw new Error(
-      message || `Expected ${expected} but got ${actual}`
+      message || `Expected ${expected} but got ${actual}`,
     );
   }
 }
@@ -62,10 +62,10 @@ Deno.test("main handles global flags", async () => {
   // Test that global flags are parsed without error
   const exitCode1 = await main(["--quiet", "--version"]);
   assertEquals(exitCode1, EXIT.SUCCESS);
-  
+
   const exitCode2 = await main(["--json", "--version"]);
   assertEquals(exitCode2, EXIT.SUCCESS);
-  
+
   const exitCode3 = await main(["--no-color", "--version"]);
   assertEquals(exitCode3, EXIT.SUCCESS);
 });

@@ -4,9 +4,12 @@ CLI interface for tyvi devspace orchestration.
 
 ## Overview
 
-`tyvi-cli` is a thin command-line interface that delegates to the core `tyvi` library. It provides human-friendly commands for managing devspaces, people, memories, and context.
+`tyvi-cli` is a thin command-line interface that delegates to the core `tyvi`
+library. It provides human-friendly commands for managing devspaces, people,
+memories, and context.
 
-This package contains **only CLI logic** — argument parsing, output formatting, and user interaction. All actual functionality lives in the `tyvi` core library.
+This package contains **only CLI logic** — argument parsing, output formatting,
+and user interaction. All actual functionality lives in the `tyvi` core library.
 
 ## Installation
 
@@ -87,6 +90,7 @@ tyvi init-hooks                # Set up git hooks
 ### Thin Wrapper
 
 This CLI does **nothing** except:
+
 1. Parse command-line arguments
 2. Call the appropriate `tyvi` core function
 3. Format the result for terminal output
@@ -94,7 +98,8 @@ This CLI does **nothing** except:
 
 ### No Business Logic
 
-All business logic lives in `tyvi`. If you find yourself writing logic here, it probably belongs in the core library.
+All business logic lives in `tyvi`. If you find yourself writing logic here, it
+probably belongs in the core library.
 
 ### Consistent Output
 
@@ -118,8 +123,10 @@ deno run --allow-all mod.ts <command>
 
 ## Related Packages
 
-- [`tyvi`](https://github.com/hiisi-digital/tyvi) — Core library (types, computation, devspace)
-- [`tyvi-mcp`](https://github.com/hiisi-digital/tyvi-mcp) — MCP server wrapper for AI agents
+- [`tyvi`](https://github.com/hiisi-digital/tyvi) — Core library (types,
+  computation, devspace)
+- [`tyvi-mcp`](https://github.com/hiisi-digital/tyvi-mcp) — MCP server wrapper
+  for AI agents
 
 ## License
 

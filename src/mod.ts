@@ -7,7 +7,7 @@
  * @module
  */
 
-import { green, red, bold, output, outputError, STATUS } from "./output.ts";
+import { bold, outputError, red, STATUS } from "./output.ts";
 
 /**
  * Exit codes for different scenarios
@@ -25,12 +25,12 @@ export const EXIT = {
  * Global flags available to all commands
  */
 export interface GlobalFlags {
-  help: boolean;      // -h, --help
-  version: boolean;   // -V, --version
-  quiet: boolean;     // -q, --quiet
-  verbose: boolean;   // -v, --verbose
-  json: boolean;      // --json
-  noColor: boolean;   // --no-color
+  help: boolean; // -h, --help
+  version: boolean; // -V, --version
+  quiet: boolean; // -q, --quiet
+  verbose: boolean; // -v, --verbose
+  json: boolean; // --json
+  noColor: boolean; // --no-color
 }
 
 /**
@@ -46,13 +46,20 @@ interface ParsedArgs {
  */
 function parseArgs(args: string[]): ParsedArgs {
   const result: ParsedArgs = { _: [] };
-  const booleanFlags = new Set(["help", "version", "quiet", "verbose", "json", "no-color"]);
-  
+  const booleanFlags = new Set([
+    "help",
+    "version",
+    "quiet",
+    "verbose",
+    "json",
+    "no-color",
+  ]);
+
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
-    
+
     if (!arg) continue;
-    
+
     if (arg.startsWith("--")) {
       const key = arg.slice(2);
       if (key.includes("=")) {
@@ -87,7 +94,7 @@ function parseArgs(args: string[]): ParsedArgs {
       result._.push(arg);
     }
   }
-  
+
   return result;
 }
 
@@ -99,7 +106,10 @@ type CommandHandler = (args: string[], flags: GlobalFlags) => Promise<number>;
 /**
  * Show help text
  */
-async function helpCommand(_args: string[], _flags: GlobalFlags): Promise<number> {
+function helpCommand(
+  _args: string[],
+  _flags: GlobalFlags,
+): Promise<number> {
   const helpText = `${bold("tyvi")} - Devspace orchestration CLI
 
 ${bold("Usage:")} tyvi <command> [options]
@@ -129,60 +139,78 @@ ${bold("Options:")}
   --no-color      Disable colors`;
 
   console.log(helpText);
-  return EXIT.SUCCESS;
+  return Promise.resolve(EXIT.SUCCESS);
 }
 
 /**
  * Show version
  */
-async function versionCommand(_args: string[], _flags: GlobalFlags): Promise<number> {
+function versionCommand(
+  _args: string[],
+  _flags: GlobalFlags,
+): Promise<number> {
   console.log("tyvi-cli 0.1.0");
-  return EXIT.SUCCESS;
+  return Promise.resolve(EXIT.SUCCESS);
 }
 
 /**
  * Stub command for status (Phase 2)
  */
-async function statusCommand(_args: string[], _flags: GlobalFlags): Promise<number> {
+function statusCommand(
+  _args: string[],
+  _flags: GlobalFlags,
+): Promise<number> {
   console.log(red(`${STATUS.error} Command not yet implemented`));
   console.log("The 'status' command will be implemented in Phase 2");
-  return EXIT.ERROR;
+  return Promise.resolve(EXIT.ERROR);
 }
 
 /**
  * Stub command for load (Phase 2)
  */
-async function loadCommand(_args: string[], _flags: GlobalFlags): Promise<number> {
+function loadCommand(
+  _args: string[],
+  _flags: GlobalFlags,
+): Promise<number> {
   console.log(red(`${STATUS.error} Command not yet implemented`));
   console.log("The 'load' command will be implemented in Phase 2");
-  return EXIT.ERROR;
+  return Promise.resolve(EXIT.ERROR);
 }
 
 /**
  * Stub command for unload (Phase 2)
  */
-async function unloadCommand(_args: string[], _flags: GlobalFlags): Promise<number> {
+function unloadCommand(
+  _args: string[],
+  _flags: GlobalFlags,
+): Promise<number> {
   console.log(red(`${STATUS.error} Command not yet implemented`));
   console.log("The 'unload' command will be implemented in Phase 2");
-  return EXIT.ERROR;
+  return Promise.resolve(EXIT.ERROR);
 }
 
 /**
  * Stub command for clone (future phase)
  */
-async function cloneCommand(_args: string[], _flags: GlobalFlags): Promise<number> {
+function cloneCommand(
+  _args: string[],
+  _flags: GlobalFlags,
+): Promise<number> {
   console.log(red(`${STATUS.error} Command not yet implemented`));
   console.log("The 'clone' command will be implemented in a future phase");
-  return EXIT.ERROR;
+  return Promise.resolve(EXIT.ERROR);
 }
 
 /**
  * Stub command for list (future phase)
  */
-async function listCommand(_args: string[], _flags: GlobalFlags): Promise<number> {
+function listCommand(
+  _args: string[],
+  _flags: GlobalFlags,
+): Promise<number> {
   console.log(red(`${STATUS.error} Command not yet implemented`));
   console.log("The 'list' command will be implemented in a future phase");
-  return EXIT.ERROR;
+  return Promise.resolve(EXIT.ERROR);
 }
 
 /**
