@@ -200,14 +200,20 @@ Implementation tasks for the CLI interface.
 
 ---
 
-## Blocked
+## Dependencies Status
 
-These tasks are blocked until `tyvi` core exports the required functions:
+The following tyvi core modules are now available:
 
-- [!] All devspace commands — need tyvi devspace module
-- [!] All person commands — need tyvi people module
-- [!] All memory commands — need tyvi memory module
-- [!] All context commands — need tyvi context module
+- [x] Computation engine — lexer, parser, evaluator, rules, dependencies
+- [x] Atoms — traits, skills, quirks, phrases, experience, stacks loading
+- [x] People — loadPerson, computePerson, listPeople
+- [x] Memory — recordMemory, recallMemories, listMemories, reinforceMemory, pruneMemories
+- [x] Context — parseUri, resolveContext, searchContext
+
+Still pending in tyvi core:
+
+- [ ] Devspace operations — load, unload, checkGitAllowed, findDevspaceRoot (in progress)
+- [ ] JSR publication — tyvi not yet published, use local import for now
 
 ---
 
