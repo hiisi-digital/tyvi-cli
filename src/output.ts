@@ -23,11 +23,11 @@ const COLORS = {
  * Status indicators with colors
  */
 export const STATUS = {
-  success: "✓",   // green
-  warning: "!",   // yellow
-  error: "✗",     // red
-  neutral: "-",   // gray
-  unknown: "?",   // gray
+  success: "✓", // green
+  warning: "!", // yellow
+  error: "✗", // red
+  neutral: "-", // gray
+  unknown: "?", // gray
 };
 
 /**
@@ -95,7 +95,10 @@ export interface TableColumn {
 /**
  * Format data as a table
  */
-export function formatTable(rows: Record<string, unknown>[], columns: TableColumn[]): string {
+export function formatTable(
+  rows: Record<string, unknown>[],
+  columns: TableColumn[],
+): string {
   if (rows.length === 0) {
     return "";
   }
@@ -124,15 +127,18 @@ export function formatTable(rows: Record<string, unknown>[], columns: TableColum
 
   // Build table
   const lines: string[] = [];
-  
+
   // Header
-  const header = columns.map((col, i) => col.header.padEnd(widths[i] ?? 0)).join("  ");
+  const header = columns.map((col, i) => col.header.padEnd(widths[i] ?? 0))
+    .join("  ");
   lines.push(bold(header));
-  
+
   // Separator
-  const separator = columns.map((_, i) => "-".repeat(widths[i] ?? 0)).join("  ");
+  const separator = columns.map((_, i) => "-".repeat(widths[i] ?? 0)).join(
+    "  ",
+  );
   lines.push(gray(separator));
-  
+
   // Rows
   rows.forEach((row) => {
     lines.push(formatRow(row));
@@ -204,17 +210,21 @@ export function outputError(error: Error, options: OutputOptions = {}): void {
 
   // JSON mode
   if (options.json) {
-    console.error(JSON.stringify({
-      error: error.message,
-      name: error.name,
-      stack: error.stack,
-    }, null, 2));
+    console.error(JSON.stringify(
+      {
+        error: error.message,
+        name: error.name,
+        stack: error.stack,
+      },
+      null,
+      2,
+    ));
     return;
   }
 
   // Default: formatted error
   console.error(red(`${STATUS.error} Error: ${error.message}`));
-  
+
   // Show stack in verbose scenarios
   if (error.stack) {
     console.error(gray(error.stack));

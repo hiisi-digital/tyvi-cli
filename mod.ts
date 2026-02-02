@@ -8,7 +8,7 @@
  */
 
 // Re-export CLI entry point
-export { main, EXIT } from "./src/mod.ts";
+export { EXIT, main } from "./src/mod.ts";
 
 // Run if executed directly
 if (import.meta.main) {

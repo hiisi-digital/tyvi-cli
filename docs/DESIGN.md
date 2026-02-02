@@ -2,7 +2,8 @@
 
 > CLI interface for tyvi devspace orchestration.
 
-This package provides a command-line interface to the `tyvi` core library. It is intentionally thin — all business logic lives in `tyvi`.
+This package provides a command-line interface to the `tyvi` core library. It is
+intentionally thin — all business logic lives in `tyvi`.
 
 ---
 
@@ -10,13 +11,14 @@ This package provides a command-line interface to the `tyvi` core library. It is
 
 tyvi-cli is **one of several interfaces** to tyvi:
 
-| Interface | Purpose |
-|-----------|---------|
-| **tyvi-cli** | Human interaction via terminal |
-| **tyvi-mcp** | AI agent interaction via MCP protocol |
+| Interface         | Purpose                                |
+| ----------------- | -------------------------------------- |
+| **tyvi-cli**      | Human interaction via terminal         |
+| **tyvi-mcp**      | AI agent interaction via MCP protocol  |
 | **tyvi** (direct) | Programmatic use in other Deno/TS code |
 
-All interfaces use the same core library. This ensures consistent behavior regardless of how tyvi is accessed.
+All interfaces use the same core library. This ensures consistent behavior
+regardless of how tyvi is accessed.
 
 ---
 
@@ -82,25 +84,25 @@ tyvi <command> [subcommand] [options] [args]
 
 ### Command Groups
 
-| Group | Commands | Description |
-|-------|----------|-------------|
-| (root) | `init`, `status`, `load`, `unload`, `clone`, `sync` | Devspace management |
-| (root) | `list`, `add`, `remove` | Repo management |
-| `person` | `list`, `show`, `compute` | People operations |
-| `memory` | `recall`, `record`, `list` | Memory operations |
-| `context` | `search`, `get` | Context queries |
-| (root) | `check-git-allowed`, `hint`, `root`, `init-hooks` | Git/hooks |
+| Group     | Commands                                            | Description         |
+| --------- | --------------------------------------------------- | ------------------- |
+| (root)    | `init`, `status`, `load`, `unload`, `clone`, `sync` | Devspace management |
+| (root)    | `list`, `add`, `remove`                             | Repo management     |
+| `person`  | `list`, `show`, `compute`                           | People operations   |
+| `memory`  | `recall`, `record`, `list`                          | Memory operations   |
+| `context` | `search`, `get`                                     | Context queries     |
+| (root)    | `check-git-allowed`, `hint`, `root`, `init-hooks`   | Git/hooks           |
 
 ### Global Flags
 
-| Flag | Description |
-|------|-------------|
-| `--help`, `-h` | Show help |
-| `--version`, `-V` | Show version |
-| `--quiet`, `-q` | Minimal output |
-| `--verbose`, `-v` | Verbose output |
-| `--json` | JSON output (where applicable) |
-| `--no-color` | Disable colors |
+| Flag              | Description                    |
+| ----------------- | ------------------------------ |
+| `--help`, `-h`    | Show help                      |
+| `--version`, `-V` | Show version                   |
+| `--quiet`, `-q`   | Minimal output                 |
+| `--verbose`, `-v` | Verbose output                 |
+| `--json`          | JSON output (where applicable) |
+| `--no-color`      | Disable colors                 |
 
 ---
 
@@ -141,11 +143,11 @@ tyvi status --json
 ```json
 {
   "lab": [
-    {"name": "viola", "status": "clean", "branch": "main"}
+    { "name": "viola", "status": "clean", "branch": "main" }
   ],
   "staging": {
-    "@hiisi": {"total": 12, "loaded": 2},
-    "@orgrinrt": {"total": 5, "loaded": 1}
+    "@hiisi": { "total": 12, "loaded": 2 },
+    "@orgrinrt": { "total": 5, "loaded": 1 }
   }
 }
 ```
@@ -157,6 +159,7 @@ tyvi status --json
 ### User-Friendly Errors
 
 Every error should include:
+
 1. What went wrong
 2. Where it went wrong (if applicable)
 3. How to fix it
@@ -170,14 +173,14 @@ Error: Repository 'viola' not found in inventory.
 
 ### Exit Codes
 
-| Code | Meaning |
-|------|---------|
-| 0 | Success |
-| 1 | General error |
-| 2 | Invalid arguments |
-| 3 | Config error |
-| 4 | Git error |
-| 5 | Permission denied |
+| Code | Meaning           |
+| ---- | ----------------- |
+| 0    | Success           |
+| 1    | General error     |
+| 2    | Invalid arguments |
+| 3    | Config error      |
+| 4    | Git error         |
+| 5    | Permission denied |
 
 ---
 
@@ -188,28 +191,28 @@ Each command follows the same pattern:
 ```typescript
 // commands/devspace.ts
 
-import { loadDevspace, getStatus } from "@hiisi/tyvi";
+import { getStatus, loadDevspace } from "@hiisi/tyvi";
 import { formatStatus, printError } from "../output.ts";
 
 export async function statusCommand(options: StatusOptions): Promise<number> {
-    try {
-        // 1. Call tyvi core
-        const devspace = await loadDevspace(options.root);
-        const status = await getStatus(devspace, options.filters);
-        
-        // 2. Format output
-        if (options.json) {
-            console.log(JSON.stringify(status, null, 2));
-        } else {
-            formatStatus(status, options);
-        }
-        
-        return 0;
-    } catch (error) {
-        // 3. Handle errors
-        printError(error);
-        return 1;
+  try {
+    // 1. Call tyvi core
+    const devspace = await loadDevspace(options.root);
+    const status = await getStatus(devspace, options.filters);
+
+    // 2. Format output
+    if (options.json) {
+      console.log(JSON.stringify(status, null, 2));
+    } else {
+      formatStatus(status, options);
     }
+
+    return 0;
+  } catch (error) {
+    // 3. Handle errors
+    printError(error);
+    return 1;
+  }
 }
 ```
 
@@ -228,7 +231,8 @@ export async function statusCommand(options: StatusOptions): Promise<number> {
 
 ### No Other Dependencies
 
-Keep this package minimal. If you need something, it probably belongs in `tyvi` core.
+Keep this package minimal. If you need something, it probably belongs in `tyvi`
+core.
 
 ---
 
@@ -240,9 +244,9 @@ Test argument parsing and output formatting:
 
 ```typescript
 Deno.test("status command parses filters", () => {
-    const args = parseStatusArgs(["--dirty", "--namespace", "@hiisi"]);
-    assertEquals(args.dirty, true);
-    assertEquals(args.namespace, "@hiisi");
+  const args = parseStatusArgs(["--dirty", "--namespace", "@hiisi"]);
+  assertEquals(args.dirty, true);
+  assertEquals(args.namespace, "@hiisi");
 });
 ```
 
@@ -252,9 +256,9 @@ Test full command execution against fixture devspaces:
 
 ```typescript
 Deno.test("status command shows loaded repos", async () => {
-    const output = await runCommand(["status"], { cwd: "fixtures/devspace" });
-    assertStringIncludes(output, "viola");
-    assertStringIncludes(output, "✓ clean");
+  const output = await runCommand(["status"], { cwd: "fixtures/devspace" });
+  assertStringIncludes(output, "viola");
+  assertStringIncludes(output, "✓ clean");
 });
 ```
 

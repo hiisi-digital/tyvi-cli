@@ -6,7 +6,8 @@ This document tracks items that need to be deprecated, removed, or migrated.
 
 ## Status: NEW PACKAGE
 
-tyvi-cli is a **new package** created to separate CLI concerns from the core tyvi library.
+tyvi-cli is a **new package** created to separate CLI concerns from the core
+tyvi library.
 
 This package has **no legacy code** to deprecate.
 
@@ -18,16 +19,16 @@ The following code should be moved **from tyvi to tyvi-cli**:
 
 ### From tyvi/src/cli/
 
-| File | Status | Notes |
-|------|--------|-------|
-| `mod.ts` | [ ] Move | CLI entry point |
-| `output.ts` | [ ] Move | Terminal formatting |
-| `commands/init.ts` | [ ] Move | Update to call tyvi core |
+| File                 | Status   | Notes                    |
+| -------------------- | -------- | ------------------------ |
+| `mod.ts`             | [ ] Move | CLI entry point          |
+| `output.ts`          | [ ] Move | Terminal formatting      |
+| `commands/init.ts`   | [ ] Move | Update to call tyvi core |
 | `commands/status.ts` | [ ] Move | Update to call tyvi core |
-| `commands/clone.ts` | [ ] Move | Update to call tyvi core |
-| `commands/sync.ts` | [ ] Move | Update to call tyvi core |
-| `commands/list.ts` | [ ] Move | Update to call tyvi core |
-| `commands/add.ts` | [ ] Move | Update to call tyvi core |
+| `commands/clone.ts`  | [ ] Move | Update to call tyvi core |
+| `commands/sync.ts`   | [ ] Move | Update to call tyvi core |
+| `commands/list.ts`   | [ ] Move | Update to call tyvi core |
+| `commands/add.ts`    | [ ] Move | Update to call tyvi core |
 | `commands/remove.ts` | [ ] Move | Update to call tyvi core |
 
 ### Migration Steps
