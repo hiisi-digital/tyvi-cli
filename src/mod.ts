@@ -7,7 +7,7 @@
  * @module
  */
 
-import { bold, outputError, red, STATUS } from "./output.ts";
+import { applyNoColor, bold, outputError, red, STATUS } from "./output.ts";
 
 /**
  * Exit codes for different scenarios
@@ -244,13 +244,9 @@ export async function main(args: string[]): Promise<number> {
       noColor: parsed["no-color"] === true,
     };
 
-    // Apply noColor to Deno (Note: noColor is readonly in strict mode, but we can try)
+    // Apply noColor to Deno
     if (flags.noColor) {
-      try {
-        (Deno as { noColor: boolean }).noColor = true;
-      } catch {
-        // Ignore if readonly
-      }
+      applyNoColor();
     }
 
     // Handle global flags

@@ -31,7 +31,9 @@ export async function select<T>(message: string, options: T[]): Promise<T> {
     return options[index];
   }
 
-  throw new Error("Invalid selection");
+  throw new Error(
+    `Invalid selection. Please enter a number between 1 and ${options.length}`,
+  );
 }
 
 /**
@@ -57,7 +59,7 @@ export async function input(
     if (defaultValue !== undefined) {
       return defaultValue;
     }
-    throw new Error("No input received");
+    throw new Error("No input received (EOF)");
   }
 
   const text = new TextDecoder().decode(buf.subarray(0, n)).trim();

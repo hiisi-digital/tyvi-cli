@@ -38,6 +38,17 @@ function shouldDisableColors(): boolean {
 }
 
 /**
+ * Apply no-color setting to Deno
+ */
+export function applyNoColor(): void {
+  try {
+    (Deno as { noColor: boolean }).noColor = true;
+  } catch {
+    // Ignore if readonly
+  }
+}
+
+/**
  * Apply ANSI color code
  */
 function applyColor(text: string, colorCode: string): string {
