@@ -4,6 +4,16 @@ Implementation tasks for the CLI interface.
 
 ---
 
+## Active Branches
+
+| Branch | Focus | Status |
+|--------|-------|--------|
+| `feat/cli-foundation` | CLI framework, output utilities, help/version | [~] In progress |
+
+See `docs/TODO.feat-cli-foundation.md` for branch-specific tasks.
+
+---
+
 ## Legend
 
 - `[ ]` - Not started
