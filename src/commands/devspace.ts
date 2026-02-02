@@ -48,11 +48,16 @@ export async function status(options: StatusOptions): Promise<number> {
       if (devspaceStatus.lab.length === 0) {
         info("  (empty)");
       } else {
+        // Calculate max name length for alignment
+        const maxNameLength = Math.max(
+          ...devspaceStatus.lab.map((r) => r.name.length),
+        );
         for (const repo of devspaceStatus.lab) {
           const statusIcon = repo.status === "clean" ? "✓" : "!";
           const statusText = repo.status === "clean" ? "clean" : "dirty";
+          const padding = " ".repeat(maxNameLength - repo.name.length + 1);
           info(
-            `  ${repo.name} ............... ${statusIcon} ${statusText} (${repo.branch})`,
+            `  ${repo.name}${padding}${statusIcon} ${statusText} (${repo.branch})`,
           );
         }
       }

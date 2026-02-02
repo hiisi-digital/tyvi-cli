@@ -38,7 +38,7 @@ export function getDevspaceStatus(
   _options?: { root?: string },
 ): Promise<DevspaceStatus> {
   console.log(`[STUB] getDevspaceStatus called`);
-  // Return mock data
+  // Return mock data with different name lengths to test alignment
   return Promise.resolve({
     lab: [
       {
@@ -48,11 +48,25 @@ export function getDevspaceStatus(
         branch: "main",
         loaded: true,
       },
+      {
+        name: "short",
+        url: "https://github.com/example/short.git",
+        status: "dirty",
+        branch: "develop",
+        loaded: true,
+      },
+      {
+        name: "very-long-repository-name",
+        url: "https://github.com/example/long.git",
+        status: "clean",
+        branch: "feature/test",
+        loaded: true,
+      },
     ],
     staging: {
       "@hiisi": { total: 5, loaded: 1 },
     },
-    summary: { loaded: 1, dirty: 0, total: 6 },
+    summary: { loaded: 3, dirty: 1, total: 8 },
   });
 }
 
