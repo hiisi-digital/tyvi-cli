@@ -7,23 +7,12 @@
  * @module
  */
 
-// Re-export CLI entry point (to be implemented)
-// export { main } from "./src/mod.ts";
-
-/**
- * Placeholder until implementation.
- *
- * TODO: Implement CLI with:
- * - Argument parsing via @std/cli
- * - Command routing to tyvi core
- * - Output formatting for terminal
- */
-export function main(): void {
-  console.log("tyvi-cli - not yet implemented");
-  console.log("See docs/TODO.md for implementation tasks");
-}
+// Re-export CLI entry point
+export { main } from "./src/mod.ts";
 
 // Run if executed directly
 if (import.meta.main) {
-  main();
+  const { main } = await import("./src/mod.ts");
+  const exitCode = await main(Deno.args);
+  Deno.exit(exitCode);
 }
