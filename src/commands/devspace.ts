@@ -3,7 +3,7 @@
  */
 
 import * as tyvi from "../tyvi-stub.ts";
-import { success, warning, error, info, printJson } from "../output.ts";
+import { error, info, printJson, success, warning } from "../output.ts";
 import type { GlobalOptions } from "../types.ts";
 
 export interface InitOptions extends GlobalOptions {
@@ -13,7 +13,7 @@ export interface InitOptions extends GlobalOptions {
 export async function init(options: InitOptions): Promise<number> {
   try {
     await tyvi.initDevspace({ root: options.root });
-    
+
     if (options.json) {
       printJson({ success: true, message: "Devspace initialized" });
     } else {
@@ -21,7 +21,7 @@ export async function init(options: InitOptions): Promise<number> {
       info("Created .tyvi directory structure");
       info("Run 'tyvi status' to see devspace status");
     }
-    
+
     return 0;
   } catch (err) {
     if (options.json) {
@@ -40,7 +40,7 @@ export interface StatusOptions extends GlobalOptions {
 export async function status(options: StatusOptions): Promise<number> {
   try {
     const devspaceStatus = await tyvi.getDevspaceStatus({ root: options.root });
-    
+
     if (options.json) {
       printJson(devspaceStatus);
     } else {
@@ -51,10 +51,12 @@ export async function status(options: StatusOptions): Promise<number> {
         for (const repo of devspaceStatus.lab) {
           const statusIcon = repo.status === "clean" ? "✓" : "!";
           const statusText = repo.status === "clean" ? "clean" : "dirty";
-          info(`  ${repo.name} ............... ${statusIcon} ${statusText} (${repo.branch})`);
+          info(
+            `  ${repo.name} ............... ${statusIcon} ${statusText} (${repo.branch})`,
+          );
         }
       }
-      
+
       info("");
       info("Staging:");
       const namespaces = Object.keys(devspaceStatus.staging);
@@ -68,11 +70,13 @@ export async function status(options: StatusOptions): Promise<number> {
           }
         }
       }
-      
+
       info("");
-      info(`Summary: ${devspaceStatus.summary.loaded} loaded, ${devspaceStatus.summary.dirty} dirty, ${devspaceStatus.summary.total} total`);
+      info(
+        `Summary: ${devspaceStatus.summary.loaded} loaded, ${devspaceStatus.summary.dirty} dirty, ${devspaceStatus.summary.total} total`,
+      );
     }
-    
+
     return 0;
   } catch (err) {
     if (options.json) {
@@ -91,8 +95,10 @@ export interface LoadOptions extends GlobalOptions {
 
 export async function load(options: LoadOptions): Promise<number> {
   try {
-    const loaded = await tyvi.loadRepos(options.pattern, { root: options.root });
-    
+    const loaded = await tyvi.loadRepos(options.pattern, {
+      root: options.root,
+    });
+
     if (options.json) {
       printJson({ success: true, loaded });
     } else {
@@ -105,7 +111,7 @@ export async function load(options: LoadOptions): Promise<number> {
         }
       }
     }
-    
+
     return 0;
   } catch (err) {
     if (options.json) {
@@ -124,8 +130,10 @@ export interface UnloadOptions extends GlobalOptions {
 
 export async function unload(options: UnloadOptions): Promise<number> {
   try {
-    const unloaded = await tyvi.unloadRepos(options.pattern, { root: options.root });
-    
+    const unloaded = await tyvi.unloadRepos(options.pattern, {
+      root: options.root,
+    });
+
     if (options.json) {
       printJson({ success: true, unloaded });
     } else {
@@ -138,7 +146,7 @@ export async function unload(options: UnloadOptions): Promise<number> {
         }
       }
     }
-    
+
     return 0;
   } catch (err) {
     if (options.json) {
@@ -157,8 +165,10 @@ export interface CloneOptions extends GlobalOptions {
 
 export async function clone(options: CloneOptions): Promise<number> {
   try {
-    const cloned = await tyvi.cloneRepos(options.pattern, { root: options.root });
-    
+    const cloned = await tyvi.cloneRepos(options.pattern, {
+      root: options.root,
+    });
+
     if (options.json) {
       printJson({ success: true, cloned });
     } else {
@@ -171,7 +181,7 @@ export async function clone(options: CloneOptions): Promise<number> {
         }
       }
     }
-    
+
     return 0;
   } catch (err) {
     if (options.json) {
@@ -190,8 +200,11 @@ export interface SyncOptions extends GlobalOptions {
 
 export async function sync(options: SyncOptions): Promise<number> {
   try {
-    const result = await tyvi.syncDevspace({ root: options.root, fetch: options.fetch });
-    
+    const result = await tyvi.syncDevspace({
+      root: options.root,
+      fetch: options.fetch,
+    });
+
     if (options.json) {
       printJson({ success: true, ...result });
     } else {
@@ -213,7 +226,7 @@ export async function sync(options: SyncOptions): Promise<number> {
         }
       }
     }
-    
+
     return 0;
   } catch (err) {
     if (options.json) {

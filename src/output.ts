@@ -2,7 +2,7 @@
  * Output formatting utilities
  */
 
-import { green, red, yellow, gray } from "@std/fmt/colors";
+import { gray, green, red, yellow } from "@std/fmt/colors";
 
 let colorEnabled = true;
 let quietMode = false;

@@ -3,7 +3,7 @@
  */
 
 import * as tyvi from "../tyvi-stub.ts";
-import { success, error, info, printJson } from "../output.ts";
+import { error, info, printJson, success } from "../output.ts";
 import type { GlobalOptions } from "../types.ts";
 
 export interface ListOptions extends GlobalOptions {
@@ -13,8 +13,11 @@ export interface ListOptions extends GlobalOptions {
 
 export async function list(options: ListOptions): Promise<number> {
   try {
-    const repos = await tyvi.listRepos({ root: options.root, loaded: options.loaded });
-    
+    const repos = await tyvi.listRepos({
+      root: options.root,
+      loaded: options.loaded,
+    });
+
     if (options.json) {
       printJson(repos);
     } else {
@@ -33,7 +36,7 @@ export async function list(options: ListOptions): Promise<number> {
         }
       }
     }
-    
+
     return 0;
   } catch (err) {
     if (options.json) {
@@ -53,7 +56,7 @@ export interface AddOptions extends GlobalOptions {
 export async function add(options: AddOptions): Promise<number> {
   try {
     await tyvi.addRepo(options.url, { namespace: options.namespace });
-    
+
     if (options.json) {
       printJson({ success: true, url: options.url });
     } else {
@@ -63,7 +66,7 @@ export async function add(options: AddOptions): Promise<number> {
       }
       info("Run 'tyvi clone' to clone this repo to staging");
     }
-    
+
     return 0;
   } catch (err) {
     if (options.json) {
@@ -82,13 +85,13 @@ export interface RemoveOptions extends GlobalOptions {
 export async function remove(options: RemoveOptions): Promise<number> {
   try {
     await tyvi.removeRepo(options.name);
-    
+
     if (options.json) {
       printJson({ success: true, name: options.name });
     } else {
       success(`Removed repo from inventory: ${options.name}`);
     }
-    
+
     return 0;
   } catch (err) {
     if (options.json) {

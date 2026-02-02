@@ -1,6 +1,6 @@
 /**
  * Stub/mock implementations for @hiisi/tyvi core library
- * 
+ *
  * These are temporary placeholders until the real tyvi library is available.
  * The CLI can be developed and tested against these stubs.
  */
@@ -34,12 +34,20 @@ export function initDevspace(_options?: { root?: string }): Promise<void> {
   return Promise.resolve();
 }
 
-export function getDevspaceStatus(_options?: { root?: string }): Promise<DevspaceStatus> {
+export function getDevspaceStatus(
+  _options?: { root?: string },
+): Promise<DevspaceStatus> {
   console.log(`[STUB] getDevspaceStatus called`);
   // Return mock data
   return Promise.resolve({
     lab: [
-      { name: "example-repo", url: "https://github.com/example/repo.git", status: "clean", branch: "main", loaded: true },
+      {
+        name: "example-repo",
+        url: "https://github.com/example/repo.git",
+        status: "clean",
+        branch: "main",
+        loaded: true,
+      },
     ],
     staging: {
       "@hiisi": { total: 5, loaded: 1 },
@@ -48,41 +56,69 @@ export function getDevspaceStatus(_options?: { root?: string }): Promise<Devspac
   });
 }
 
-export function loadRepos(pattern: string, _options?: { root?: string }): Promise<string[]> {
+export function loadRepos(
+  pattern: string,
+  _options?: { root?: string },
+): Promise<string[]> {
   console.log(`[STUB] loadRepos called with pattern: ${pattern}`);
   // In real implementation, this would move repos from staging to lab
   return Promise.resolve(["example-repo"]);
 }
 
-export function unloadRepos(pattern: string, _options?: { root?: string }): Promise<string[]> {
+export function unloadRepos(
+  pattern: string,
+  _options?: { root?: string },
+): Promise<string[]> {
   console.log(`[STUB] unloadRepos called with pattern: ${pattern}`);
   // In real implementation, this would move repos from lab to staging
   return Promise.resolve(["example-repo"]);
 }
 
-export function cloneRepos(pattern: string, _options?: { root?: string }): Promise<string[]> {
+export function cloneRepos(
+  pattern: string,
+  _options?: { root?: string },
+): Promise<string[]> {
   console.log(`[STUB] cloneRepos called with pattern: ${pattern}`);
   // In real implementation, this would clone repos to staging
   return Promise.resolve(["example-repo"]);
 }
 
-export function syncDevspace(_options?: { root?: string; fetch?: boolean }): Promise<{ added: string[]; removed: string[] }> {
+export function syncDevspace(
+  _options?: { root?: string; fetch?: boolean },
+): Promise<{ added: string[]; removed: string[] }> {
   console.log(`[STUB] syncDevspace called`);
   // In real implementation, this would sync inventory with devspace
   return Promise.resolve({ added: [], removed: [] });
 }
 
-export function listRepos(_options?: { root?: string; loaded?: boolean }): Promise<Repo[]> {
+export function listRepos(
+  _options?: { root?: string; loaded?: boolean },
+): Promise<Repo[]> {
   console.log(`[STUB] listRepos called`);
   // Return mock data
   return Promise.resolve([
-    { name: "example-repo", url: "https://github.com/example/repo.git", namespace: "@hiisi", loaded: true },
-    { name: "another-repo", url: "https://github.com/example/another.git", namespace: "@hiisi", loaded: false },
+    {
+      name: "example-repo",
+      url: "https://github.com/example/repo.git",
+      namespace: "@hiisi",
+      loaded: true,
+    },
+    {
+      name: "another-repo",
+      url: "https://github.com/example/another.git",
+      namespace: "@hiisi",
+      loaded: false,
+    },
   ]);
 }
 
-export function addRepo(url: string, options?: { namespace?: string }): Promise<void> {
-  console.log(`[STUB] addRepo called with url: ${url}, namespace: ${options?.namespace}`);
+export function addRepo(
+  url: string,
+  options?: { namespace?: string },
+): Promise<void> {
+  console.log(
+    `[STUB] addRepo called with url: ${url}, namespace: ${options?.namespace}`,
+  );
   // In real implementation, this would add repo to inventory
   return Promise.resolve();
 }

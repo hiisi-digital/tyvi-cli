@@ -3,7 +3,7 @@
  */
 
 import { parseArgs } from "@std/cli/parse-args";
-import { setColorEnabled, setQuietMode, error, info } from "./output.ts";
+import { error, info, setColorEnabled, setQuietMode } from "./output.ts";
 import type { GlobalOptions } from "./types.ts";
 
 // Import commands
@@ -77,7 +77,18 @@ function applyGlobalOptions(options: GlobalOptions): void {
 export async function main(args: string[]): Promise<number> {
   // Parse arguments
   const parsed = parseArgs(args, {
-    boolean: ["help", "h", "version", "V", "quiet", "q", "json", "no-color", "loaded", "fetch"],
+    boolean: [
+      "help",
+      "h",
+      "version",
+      "V",
+      "quiet",
+      "q",
+      "json",
+      "no-color",
+      "loaded",
+      "fetch",
+    ],
     string: ["root", "namespace"],
     alias: {
       h: "help",
