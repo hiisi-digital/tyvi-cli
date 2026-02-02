@@ -28,15 +28,16 @@ export interface DevspaceStatus {
 }
 
 // Stub implementations
-export async function initDevspace(options?: { root?: string }): Promise<void> {
-  console.log(`[STUB] initDevspace called with root: ${options?.root || "."}`);
+export function initDevspace(_options?: { root?: string }): Promise<void> {
+  console.log(`[STUB] initDevspace called with root: ${_options?.root || "."}`);
   // In real implementation, this would create .tyvi directory structure
+  return Promise.resolve();
 }
 
-export async function getDevspaceStatus(options?: { root?: string }): Promise<DevspaceStatus> {
+export function getDevspaceStatus(_options?: { root?: string }): Promise<DevspaceStatus> {
   console.log(`[STUB] getDevspaceStatus called`);
   // Return mock data
-  return {
+  return Promise.resolve({
     lab: [
       { name: "example-repo", url: "https://github.com/example/repo.git", status: "clean", branch: "main", loaded: true },
     ],
@@ -44,48 +45,50 @@ export async function getDevspaceStatus(options?: { root?: string }): Promise<De
       "@hiisi": { total: 5, loaded: 1 },
     },
     summary: { loaded: 1, dirty: 0, total: 6 },
-  };
+  });
 }
 
-export async function loadRepos(pattern: string, options?: { root?: string }): Promise<string[]> {
+export function loadRepos(pattern: string, _options?: { root?: string }): Promise<string[]> {
   console.log(`[STUB] loadRepos called with pattern: ${pattern}`);
   // In real implementation, this would move repos from staging to lab
-  return ["example-repo"];
+  return Promise.resolve(["example-repo"]);
 }
 
-export async function unloadRepos(pattern: string, options?: { root?: string }): Promise<string[]> {
+export function unloadRepos(pattern: string, _options?: { root?: string }): Promise<string[]> {
   console.log(`[STUB] unloadRepos called with pattern: ${pattern}`);
   // In real implementation, this would move repos from lab to staging
-  return ["example-repo"];
+  return Promise.resolve(["example-repo"]);
 }
 
-export async function cloneRepos(pattern: string, options?: { root?: string }): Promise<string[]> {
+export function cloneRepos(pattern: string, _options?: { root?: string }): Promise<string[]> {
   console.log(`[STUB] cloneRepos called with pattern: ${pattern}`);
   // In real implementation, this would clone repos to staging
-  return ["example-repo"];
+  return Promise.resolve(["example-repo"]);
 }
 
-export async function syncDevspace(options?: { root?: string; fetch?: boolean }): Promise<{ added: string[]; removed: string[] }> {
+export function syncDevspace(_options?: { root?: string; fetch?: boolean }): Promise<{ added: string[]; removed: string[] }> {
   console.log(`[STUB] syncDevspace called`);
   // In real implementation, this would sync inventory with devspace
-  return { added: [], removed: [] };
+  return Promise.resolve({ added: [], removed: [] });
 }
 
-export async function listRepos(options?: { root?: string; loaded?: boolean }): Promise<Repo[]> {
+export function listRepos(_options?: { root?: string; loaded?: boolean }): Promise<Repo[]> {
   console.log(`[STUB] listRepos called`);
   // Return mock data
-  return [
+  return Promise.resolve([
     { name: "example-repo", url: "https://github.com/example/repo.git", namespace: "@hiisi", loaded: true },
     { name: "another-repo", url: "https://github.com/example/another.git", namespace: "@hiisi", loaded: false },
-  ];
+  ]);
 }
 
-export async function addRepo(url: string, options?: { namespace?: string }): Promise<void> {
+export function addRepo(url: string, options?: { namespace?: string }): Promise<void> {
   console.log(`[STUB] addRepo called with url: ${url}, namespace: ${options?.namespace}`);
   // In real implementation, this would add repo to inventory
+  return Promise.resolve();
 }
 
-export async function removeRepo(name: string): Promise<void> {
+export function removeRepo(name: string): Promise<void> {
   console.log(`[STUB] removeRepo called with name: ${name}`);
   // In real implementation, this would remove repo from inventory
+  return Promise.resolve();
 }

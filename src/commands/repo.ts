@@ -3,7 +3,7 @@
  */
 
 import * as tyvi from "../tyvi-stub.ts";
-import { success, warning, error, info, printJson } from "../output.ts";
+import { success, error, info, printJson } from "../output.ts";
 import type { GlobalOptions } from "../types.ts";
 
 export interface ListOptions extends GlobalOptions {
