@@ -8,6 +8,9 @@
  */
 
 import { applyNoColor, bold, outputError, red, STATUS } from "./output.ts";
+import { personCommand } from "./commands/person.ts";
+import { memoryCommand } from "./commands/memory.ts";
+import { contextCommand } from "./commands/context.ts";
 
 /**
  * Exit codes for different scenarios
@@ -224,6 +227,9 @@ const commands: Record<string, CommandHandler> = {
   unload: unloadCommand,
   clone: cloneCommand,
   list: listCommand,
+  person: personCommand,
+  memory: memoryCommand,
+  context: contextCommand,
 };
 
 /**

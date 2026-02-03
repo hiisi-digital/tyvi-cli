@@ -27,8 +27,9 @@ export async function select<T>(message: string, options: T[]): Promise<T> {
   const answer = await input("Enter number");
   const index = parseInt(answer, 10) - 1;
 
-  if (index >= 0 && index < options.length) {
-    return options[index];
+  const selected = options[index];
+  if (index >= 0 && index < options.length && selected !== undefined) {
+    return selected;
   }
 
   throw new Error(
