@@ -11,6 +11,24 @@ import { applyNoColor, bold, outputError, red, STATUS } from "./output.ts";
 import { personCommand } from "./commands/person.ts";
 import { memoryCommand } from "./commands/memory.ts";
 import { contextCommand } from "./commands/context.ts";
+import {
+  checkGitAllowedCommand,
+  cloneCommand,
+  hintCommand,
+  initCommand,
+  listCommand,
+  loadCommand,
+  repoCommand,
+  rootCommand,
+  statusCommand,
+  syncCommand,
+  unloadCommand,
+} from "./commands/devspace.ts";
+import { migrateCommand } from "./commands/migrate.ts";
+import { atomsCommand } from "./commands/atoms.ts";
+import { relationshipCommand } from "./commands/relationship.ts";
+import { guardsCommand } from "./commands/guards.ts";
+import { completionsCommand } from "./commands/completions.ts";
 
 /**
  * Exit codes for different scenarios
@@ -56,6 +74,11 @@ function parseArgs(args: string[]): ParsedArgs {
     "verbose",
     "json",
     "no-color",
+    "all",
+    "force",
+    "move",
+    "short",
+    "delete-files",
   ]);
 
   for (let i = 0; i < args.length; i++) {
@@ -91,7 +114,15 @@ function parseArgs(args: string[]): ParsedArgs {
         else if (flag === "V") result["version"] = true;
         else if (flag === "q") result["quiet"] = true;
         else if (flag === "v") result["verbose"] = true;
-        else result[flag] = true;
+        else if (flag === "s") result["short"] = true;
+        else if (flag === "f") result["force"] = true;
+        else if (flag === "i") {
+          // -i <path> for migrate
+          const nextArg = args[i + 1];
+          if (nextArg && !nextArg.startsWith("-")) {
+            result["input"] = args[++i];
+          }
+        } else result[flag] = true;
       }
     } else {
       result._.push(arg);
@@ -117,29 +148,55 @@ function helpCommand(
 
 ${bold("Usage:")} tyvi <command> [options]
 
-${bold("Commands:")}
-  status          Show devspace status
-  load <pattern>  Load repos to lab
-  unload <pattern> Unload repos from lab
-  clone <pattern> Clone repos to staging
-  list            List repos from inventory
-  
-  person list     List all people
-  person show     Show person details
-  
-  memory recall   Recall memories
-  memory record   Record new memory
-  
-  context search  Search context
-  context get     Get context by URI
+${bold("Devspace Commands:")}
+  init [path]       Initialize a new devspace
+  status            Show devspace status
+  list [-s]         List repos from inventory
+  load <pattern>    Load repos to lab
+  unload <pattern>  Unload repos from lab
+  clone <pattern>   Clone repos to staging
+  sync [--fetch]    Sync devspace structure
+  repo add <url>    Add repo to inventory
+  repo remove <n>   Remove repo from inventory
+  migrate [-i path] Migrate ad-hoc directory into devspace
+
+${bold("Git Guards:")}
+  guards setup      Install git guards (shell, hooks, direnv)
+  guards validate   Validate guard installation
+  guards status     Show guard status
+  check-git-allowed Check if git is allowed at path
+  hint              Show devspace info and quick commands
+  root              Print devspace root path
+
+${bold("People & Relationships:")}
+  person list       List all people
+  person show <id>  Show person details
+  relationship list List relationships
+  relationship show Show relationships for person
+  relationship log  Add relationship log entry
+
+${bold("Memory:")}
+  memory list       List memories
+  memory recall     Recall memories
+  memory record     Record new memory
+  memory reinforce  Reinforce a memory
+  memory prune      Prune weak memories
+
+${bold("Context & Atoms:")}
+  context search    Search context
+  context get <uri> Get context by URI
+  atoms <type> [id] Browse atoms (traits, skills, quirks, ...)
+
+${bold("Shell:")}
+  completions <sh>  Generate shell completions (bash, zsh, fish)
 
 ${bold("Options:")}
-  -h, --help      Show help
-  -V, --version   Show version
-  -q, --quiet     Minimal output
-  -v, --verbose   Verbose output
-  --json          JSON output
-  --no-color      Disable colors`;
+  -h, --help        Show help
+  -V, --version     Show version
+  -q, --quiet       Minimal output
+  -v, --verbose     Verbose output
+  --json            JSON output
+  --no-color        Disable colors`;
 
   console.log(helpText);
   return Promise.resolve(EXIT.SUCCESS);
@@ -157,79 +214,30 @@ function versionCommand(
 }
 
 /**
- * Stub command for status (Phase 2)
- */
-function statusCommand(
-  _args: string[],
-  _flags: GlobalFlags,
-): Promise<number> {
-  console.log(red(`${STATUS.error} Command not yet implemented`));
-  console.log("The 'status' command will be implemented in Phase 2");
-  return Promise.resolve(EXIT.ERROR);
-}
-
-/**
- * Stub command for load (Phase 2)
- */
-function loadCommand(
-  _args: string[],
-  _flags: GlobalFlags,
-): Promise<number> {
-  console.log(red(`${STATUS.error} Command not yet implemented`));
-  console.log("The 'load' command will be implemented in Phase 2");
-  return Promise.resolve(EXIT.ERROR);
-}
-
-/**
- * Stub command for unload (Phase 2)
- */
-function unloadCommand(
-  _args: string[],
-  _flags: GlobalFlags,
-): Promise<number> {
-  console.log(red(`${STATUS.error} Command not yet implemented`));
-  console.log("The 'unload' command will be implemented in Phase 2");
-  return Promise.resolve(EXIT.ERROR);
-}
-
-/**
- * Stub command for clone (future phase)
- */
-function cloneCommand(
-  _args: string[],
-  _flags: GlobalFlags,
-): Promise<number> {
-  console.log(red(`${STATUS.error} Command not yet implemented`));
-  console.log("The 'clone' command will be implemented in a future phase");
-  return Promise.resolve(EXIT.ERROR);
-}
-
-/**
- * Stub command for list (future phase)
- */
-function listCommand(
-  _args: string[],
-  _flags: GlobalFlags,
-): Promise<number> {
-  console.log(red(`${STATUS.error} Command not yet implemented`));
-  console.log("The 'list' command will be implemented in a future phase");
-  return Promise.resolve(EXIT.ERROR);
-}
-
-/**
  * Command registry
  */
 const commands: Record<string, CommandHandler> = {
   help: helpCommand,
   version: versionCommand,
+  init: initCommand,
   status: statusCommand,
+  list: listCommand,
   load: loadCommand,
   unload: unloadCommand,
   clone: cloneCommand,
-  list: listCommand,
+  sync: syncCommand,
+  repo: repoCommand,
+  migrate: migrateCommand,
+  "check-git-allowed": checkGitAllowedCommand,
+  hint: hintCommand,
+  root: rootCommand,
   person: personCommand,
   memory: memoryCommand,
   context: contextCommand,
+  atoms: atomsCommand,
+  relationship: relationshipCommand,
+  guards: guardsCommand,
+  completions: completionsCommand,
 };
 
 /**

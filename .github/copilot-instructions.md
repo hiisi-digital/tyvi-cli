@@ -7,12 +7,14 @@
 **Thin wrapper around tyvi core**. Human-friendly terminal commands.
 
 Responsibilities:
+
 - Argument parsing
 - Terminal output formatting (colors, tables, progress)
 - User interaction (prompts, confirmations)
 - Error display with helpful messages
 
 NOT responsible for:
+
 - Business logic (delegate to `tyvi` core)
 - Config parsing (delegate to `tyvi` core)
 - Git operations (delegate to `tyvi` core)
@@ -39,6 +41,7 @@ NOT responsible for:
 Format: `type: lowercase message`
 
 Examples:
+
 - `feat: add status command with table output`
 - `fix: handle missing devspace gracefully`
 - `refactor: extract table formatting`
@@ -65,7 +68,7 @@ No other dependencies allowed.
 export async function statusCommand(args: StatusArgs) {
   const devspace = await tyvi.loadDevspace(args.path);
   const status = await tyvi.getStatus(devspace, args.filters);
-  
+
   formatStatusTable(status); // CLI formats only
 }
 

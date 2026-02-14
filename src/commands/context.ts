@@ -3,26 +3,19 @@
  * @module
  */
 
-import { resolveContext, searchContext, parseUri } from "tyvi";
+import { parseUri, resolveContext, searchContext } from "tyvi";
 import type { GlobalFlags } from "../mod.ts";
 import { EXIT } from "../mod.ts";
+import { resolveDevspace } from "../devspace.ts";
 import {
-  formatTable,
-  green,
-  red,
-  gray,
   bold,
+  formatTable,
+  gray,
+  green,
   output,
+  red,
   STATUS,
 } from "../output.ts";
-
-/**
- * Find devspace data path
- */
-function getDataPath(): string {
-  const home = Deno.env.get("HOME") || ".";
-  return `${home}/.ctl`;
-}
 
 /**
  * Handle context subcommands
@@ -66,8 +59,8 @@ async function contextGet(args: string[], flags: GlobalFlags): Promise<number> {
   }
 
   try {
-    const dataPath = getDataPath();
-    const result = await resolveContext(dataPath, uri);
+    const devspace = await resolveDevspace();
+    const result = await resolveContext(devspace.rootPath, uri);
 
     if (flags.json) {
       output(result, { json: true });
@@ -78,7 +71,11 @@ async function contextGet(args: string[], flags: GlobalFlags): Promise<number> {
     console.log();
     console.log(`${bold("URI:")} ${result.uri}`);
     console.log(`${bold("Type:")} ${result.parsed.type}`);
-    console.log(`${bold("Scope:")} ${result.resolvedAt.level}${result.resolvedAt.org ? `/${result.resolvedAt.org}` : ""}${result.resolvedAt.team ? `/${result.resolvedAt.team}` : ""}`);
+    console.log(
+      `${bold("Scope:")} ${result.resolvedAt.level}${
+        result.resolvedAt.org ? `/${result.resolvedAt.org}` : ""
+      }${result.resolvedAt.team ? `/${result.resolvedAt.team}` : ""}`,
+    );
     console.log();
 
     if (result.content) {
@@ -112,8 +109,11 @@ async function contextSearch(
   }
 
   try {
-    const dataPath = getDataPath();
-    const results = await searchContext(dataPath, { query, limit: 10 });
+    const devspace = await resolveDevspace();
+    const results = await searchContext(devspace.rootPath, {
+      query,
+      limit: 10,
+    });
 
     if (results.results.length === 0) {
       if (!flags.quiet) {
@@ -150,7 +150,7 @@ async function contextSearch(
 /**
  * Parse a context URI
  */
-async function contextParse(
+function contextParse(
   args: string[],
   flags: GlobalFlags,
 ): Promise<number> {
@@ -158,7 +158,7 @@ async function contextParse(
   if (!uri) {
     console.error(red(`${STATUS.error} Missing URI`));
     console.error("Usage: tyvi context parse <uri>");
-    return EXIT.INVALID_ARGS;
+    return Promise.resolve(EXIT.INVALID_ARGS);
   }
 
   try {
@@ -166,7 +166,7 @@ async function contextParse(
 
     if (flags.json) {
       output(parsed, { json: true });
-      return EXIT.SUCCESS;
+      return Promise.resolve(EXIT.SUCCESS);
     }
 
     console.log(green(`${STATUS.success} Valid ctx:// URI`));
@@ -175,9 +175,9 @@ async function contextParse(
     console.log(`${bold("Type:")} ${parsed.type}`);
     console.log(`${bold("Path:")} ${parsed.path}`);
 
-    return EXIT.SUCCESS;
+    return Promise.resolve(EXIT.SUCCESS);
   } catch (error) {
     console.error(red(`${STATUS.error} Invalid URI: ${error}`));
-    return EXIT.INVALID_ARGS;
+    return Promise.resolve(EXIT.INVALID_ARGS);
   }
 }

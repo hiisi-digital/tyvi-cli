@@ -5,6 +5,10 @@
 This package provides a command-line interface to the `tyvi` core library. It is
 intentionally thin — all business logic lives in `tyvi`.
 
+**Note:** Git restrictions and shell integration are handled by tyvi core. The
+CLI provides commands to install and validate guards, but the actual restriction
+logic is in [`tyvi/docs/DESIGN.GIT.md`](../../tyvi/docs/DESIGN.GIT.md).
+
 ---
 
 ## Overview
@@ -272,6 +276,8 @@ None currently — this package is intentionally simple.
 
 ## Related Documents
 
-- `tyvi/docs/DESIGN.md` — Core library design
+- [`tyvi/docs/DESIGN.md`](../../tyvi/docs/DESIGN.md) — Core library design
+- [`tyvi/docs/DESIGN.GIT.md`](../../tyvi/docs/DESIGN.GIT.md) — Git restrictions,
+  shell/direnv integration
 - `tyvi-mcp/docs/DESIGN.md` — MCP server design
 - `docs/TODO.md` — Implementation tasks

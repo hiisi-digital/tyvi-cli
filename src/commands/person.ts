@@ -3,27 +3,19 @@
  * @module
  */
 
-import { listPeople, loadPerson, computePerson } from "tyvi";
+import { computePerson, listPeople, loadPerson } from "tyvi";
 import type { GlobalFlags } from "../mod.ts";
 import { EXIT } from "../mod.ts";
+import { resolveDevspace } from "../devspace.ts";
 import {
-  formatTable,
-  green,
-  red,
-  gray,
   bold,
+  formatTable,
+  gray,
+  green,
   output,
+  red,
   STATUS,
 } from "../output.ts";
-
-/**
- * Find devspace data path (placeholder until loadDevspace works)
- */
-function getDataPath(): string {
-  // For now, assume current directory has data/ or use ~/.ctl/
-  const home = Deno.env.get("HOME") || ".";
-  return `${home}/.ctl`;
-}
 
 /**
  * Handle person subcommands
@@ -60,8 +52,8 @@ ${bold("Commands:")}
  */
 async function personList(flags: GlobalFlags): Promise<number> {
   try {
-    const dataPath = getDataPath();
-    const people = await listPeople(dataPath);
+    const devspace = await resolveDevspace();
+    const people = await listPeople(devspace.rootPath);
 
     if (people.length === 0) {
       if (!flags.quiet) {
@@ -107,8 +99,8 @@ async function personShow(args: string[], flags: GlobalFlags): Promise<number> {
   }
 
   try {
-    const dataPath = getDataPath();
-    const person = await loadPerson(dataPath, personId);
+    const devspace = await resolveDevspace();
+    const person = await loadPerson(devspace.rootPath, personId);
 
     if (flags.json) {
       output(person, { json: true });
@@ -159,8 +151,8 @@ async function personCompute(
   }
 
   try {
-    const dataPath = getDataPath();
-    const computed = await computePerson(dataPath, personId);
+    const devspace = await resolveDevspace();
+    const computed = await computePerson(devspace.rootPath, personId);
 
     if (flags.json) {
       output(computed, { json: true });
@@ -176,7 +168,9 @@ async function personCompute(
     console.log(bold("Computed Traits:"));
     for (const [key, value] of Object.entries(computed.traits)) {
       const traceEntry = computed.trace?.values.get(`traits.${key}`);
-      const source = traceEntry?.isAnchor ? green("(anchor)") : gray("(computed)");
+      const source = traceEntry?.isAnchor
+        ? green("(anchor)")
+        : gray("(computed)");
       console.log(`  ${key}: ${value} ${source}`);
     }
     console.log();
@@ -184,7 +178,9 @@ async function personCompute(
     console.log(bold("Computed Skills:"));
     for (const [key, value] of Object.entries(computed.skills)) {
       const traceEntry = computed.trace?.values.get(`skills.${key}`);
-      const source = traceEntry?.isAnchor ? green("(anchor)") : gray("(computed)");
+      const source = traceEntry?.isAnchor
+        ? green("(anchor)")
+        : gray("(computed)");
       console.log(`  ${key}: ${value} ${source}`);
     }
 

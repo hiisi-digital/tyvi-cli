@@ -5,31 +5,26 @@
 
 import {
   listMemories,
+  pruneMemories,
   recallMemories,
   recordMemory,
+  reinforceMemory,
 } from "tyvi";
 import type { MemoryInput } from "tyvi";
 import type { GlobalFlags } from "../mod.ts";
 import { EXIT } from "../mod.ts";
+import { resolveDevspace } from "../devspace.ts";
 import {
-  formatTable,
-  green,
-  yellow,
-  red,
-  gray,
   bold,
+  formatTable,
+  gray,
+  green,
   output,
+  red,
   STATUS,
+  yellow,
 } from "../output.ts";
 import { input } from "../prompts.ts";
-
-/**
- * Find devspace data path
- */
-function getDataPath(): string {
-  const home = Deno.env.get("HOME") || ".";
-  return `${home}/.ctl`;
-}
 
 /**
  * Format strength as visual indicator
@@ -58,6 +53,10 @@ export async function memoryCommand(
       return await memoryRecall(subargs, flags);
     case "record":
       return await memoryRecord(subargs, flags);
+    case "reinforce":
+      return await memoryReinforce(subargs, flags);
+    case "prune":
+      return await memoryPrune(subargs, flags);
     default:
       console.log(`${bold("tyvi memory")} - Memory management
 
@@ -66,7 +65,9 @@ ${bold("Usage:")} tyvi memory <command> [args]
 ${bold("Commands:")}
   list [--person <id>] [--topic <topic>]   List memories
   recall <person> [topic]                   Recall memories for person
-  record <person>                           Record new memory (interactive)`);
+  record <person>                           Record new memory (interactive)
+  reinforce <id>                            Reinforce a memory
+  prune [--person <id>] [--threshold <n>]   Prune weak memories`);
       return subcommand ? EXIT.INVALID_ARGS : EXIT.SUCCESS;
   }
 }
@@ -76,7 +77,7 @@ ${bold("Commands:")}
  */
 async function memoryList(args: string[], flags: GlobalFlags): Promise<number> {
   try {
-    const dataPath = getDataPath();
+    const devspace = await resolveDevspace();
 
     // Parse filter args
     let person: string | undefined;
@@ -90,7 +91,7 @@ async function memoryList(args: string[], flags: GlobalFlags): Promise<number> {
       }
     }
 
-    const memories = await listMemories(dataPath, {
+    const memories = await listMemories(devspace.rootPath, {
       person,
       topic,
       includeWeak: true,
@@ -147,12 +148,12 @@ async function memoryRecall(
   const topic = args[1];
 
   try {
-    const dataPath = getDataPath();
+    const devspace = await resolveDevspace();
     const person = personId.startsWith("ctx://")
       ? personId
       : `ctx://person/${personId}`;
 
-    const memories = await recallMemories(dataPath, {
+    const memories = await recallMemories(devspace.rootPath, {
       person,
       topic,
       limit: 10,
@@ -237,8 +238,8 @@ async function memoryRecord(
       },
     };
 
-    const dataPath = getDataPath();
-    const memory = await recordMemory(dataPath, memoryInput);
+    const devspace = await resolveDevspace();
+    const memory = await recordMemory(devspace.rootPath, memoryInput);
 
     if (flags.json) {
       output(memory, { json: true });
@@ -249,6 +250,77 @@ async function memoryRecord(
     return EXIT.SUCCESS;
   } catch (error) {
     console.error(red(`${STATUS.error} Failed to record memory: ${error}`));
+    return EXIT.ERROR;
+  }
+}
+
+/**
+ * Reinforce a memory by ID
+ */
+async function memoryReinforce(
+  args: string[],
+  flags: GlobalFlags,
+): Promise<number> {
+  const memoryId = args[0];
+  if (!memoryId) {
+    console.error(red(`${STATUS.error} Missing memory ID`));
+    console.error("Usage: tyvi memory reinforce <id> [reason]");
+    return EXIT.INVALID_ARGS;
+  }
+
+  const reason = args.slice(1).join(" ") || "manual reinforcement";
+
+  try {
+    const devspace = await resolveDevspace();
+    const result = await reinforceMemory(devspace.rootPath, memoryId, reason);
+
+    if (flags.json) {
+      output(result, { json: true });
+      return EXIT.SUCCESS;
+    }
+
+    console.log(
+      green(
+        `${STATUS.success} Reinforced ${memoryId} (${
+          result.previousStrength.toFixed(2)
+        } -> ${result.newStrength.toFixed(2)})`,
+      ),
+    );
+    return EXIT.SUCCESS;
+  } catch (error) {
+    console.error(
+      red(`${STATUS.error} Failed to reinforce memory: ${error}`),
+    );
+    return EXIT.ERROR;
+  }
+}
+
+/**
+ * Prune weak memories
+ */
+async function memoryPrune(
+  _args: string[],
+  flags: GlobalFlags,
+): Promise<number> {
+  try {
+    const devspace = await resolveDevspace();
+    const result = await pruneMemories(devspace.rootPath);
+
+    if (flags.json) {
+      output(result, { json: true });
+      return EXIT.SUCCESS;
+    }
+
+    console.log(
+      green(
+        `${STATUS.success} Pruned ${result.pruned}/${result.checked} memories (threshold: ${
+          result.threshold.toFixed(2)
+        })`,
+      ),
+    );
+    return EXIT.SUCCESS;
+  } catch (error) {
+    console.error(red(`${STATUS.error} Failed to prune memories: ${error}`));
     return EXIT.ERROR;
   }
 }
