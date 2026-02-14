@@ -1,6 +1,6 @@
 {
   "name": "@hiisi/tyvi-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "CLI interface for tyvi devspace orchestration",
   "license": "MPL-2.0",
   "exports": "./mod.ts",
@@ -36,9 +36,13 @@
   },
   "lint": {
     "rules": {
-      "tags": ["recommended"]
+      "tags": [
+        "recommended"
+      ]
     },
-    "exclude": ["viola.config.ts"]
+    "exclude": [
+      "viola.config.ts"
+    ]
   },
   "fmt": {
     "useTabs": false,
