@@ -3,25 +3,12 @@
  * @module
  */
 
-import {
-  addRelationshipLogEntry,
-  listRelationships,
-  loadRelationships,
-} from "tyvi";
+import { addRelationshipLogEntry, listRelationships, loadRelationships } from "tyvi";
 import type { RelationshipLogEntry } from "tyvi";
 import type { GlobalFlags } from "../mod.ts";
 import { EXIT } from "../mod.ts";
 import { resolveDevspace } from "../devspace.ts";
-import {
-  bold,
-  formatTable,
-  gray,
-  green,
-  output,
-  red,
-  STATUS,
-  yellow,
-} from "../output.ts";
+import { bold, formatTable, gray, green, output, red, STATUS, yellow } from "../output.ts";
 import { input } from "../prompts.ts";
 
 /**
@@ -80,8 +67,7 @@ async function relationshipList(
 
     const relationships = await listRelationships(devspace.rootPath, {
       person,
-      type: type as Parameters<typeof listRelationships>[1] extends
-        { type?: infer T } ? T : never,
+      type: type as Parameters<typeof listRelationships>[1] extends { type?: infer T } ? T : never,
       includeInactive,
     });
 

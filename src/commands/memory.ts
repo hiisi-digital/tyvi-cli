@@ -3,27 +3,12 @@
  * @module
  */
 
-import {
-  listMemories,
-  pruneMemories,
-  recallMemories,
-  recordMemory,
-  reinforceMemory,
-} from "tyvi";
+import { listMemories, pruneMemories, recallMemories, recordMemory, reinforceMemory } from "tyvi";
 import type { MemoryInput } from "tyvi";
 import type { GlobalFlags } from "../mod.ts";
 import { EXIT } from "../mod.ts";
 import { resolveDevspace } from "../devspace.ts";
-import {
-  bold,
-  formatTable,
-  gray,
-  green,
-  output,
-  red,
-  STATUS,
-  yellow,
-} from "../output.ts";
+import { bold, formatTable, gray, green, output, red, STATUS, yellow } from "../output.ts";
 import { input } from "../prompts.ts";
 
 /**
@@ -149,9 +134,7 @@ async function memoryRecall(
 
   try {
     const devspace = await resolveDevspace();
-    const person = personId.startsWith("ctx://")
-      ? personId
-      : `ctx://person/${personId}`;
+    const person = personId.startsWith("ctx://") ? personId : `ctx://person/${personId}`;
 
     const memories = await recallMemories(devspace.rootPath, {
       person,
@@ -206,9 +189,7 @@ async function memoryRecord(
   }
 
   try {
-    const person = personId.startsWith("ctx://")
-      ? personId
-      : `ctx://person/${personId}`;
+    const person = personId.startsWith("ctx://") ? personId : `ctx://person/${personId}`;
 
     // Interactive prompts
     const summary = await input("Summary");
@@ -281,9 +262,9 @@ async function memoryReinforce(
 
     console.log(
       green(
-        `${STATUS.success} Reinforced ${memoryId} (${
-          result.previousStrength.toFixed(2)
-        } -> ${result.newStrength.toFixed(2)})`,
+        `${STATUS.success} Reinforced ${memoryId} (${result.previousStrength.toFixed(2)} -> ${
+          result.newStrength.toFixed(2)
+        })`,
       ),
     );
     return EXIT.SUCCESS;

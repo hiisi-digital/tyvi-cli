@@ -44,9 +44,7 @@ export async function input(
   message: string,
   defaultValue?: string,
 ): Promise<string> {
-  const prompt = defaultValue
-    ? `${message} [${defaultValue}]: `
-    : `${message}: `;
+  const prompt = defaultValue ? `${message} [${defaultValue}]: ` : `${message}: `;
 
   // Write prompt to stderr so it doesn't interfere with piped output
   await Deno.stderr.write(new TextEncoder().encode(prompt));

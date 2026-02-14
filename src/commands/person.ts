@@ -7,15 +7,7 @@ import { computePerson, listPeople, loadPerson } from "tyvi";
 import type { GlobalFlags } from "../mod.ts";
 import { EXIT } from "../mod.ts";
 import { resolveDevspace } from "../devspace.ts";
-import {
-  bold,
-  formatTable,
-  gray,
-  green,
-  output,
-  red,
-  STATUS,
-} from "../output.ts";
+import { bold, formatTable, gray, green, output, red, STATUS } from "../output.ts";
 
 /**
  * Handle person subcommands
@@ -168,9 +160,7 @@ async function personCompute(
     console.log(bold("Computed Traits:"));
     for (const [key, value] of Object.entries(computed.traits)) {
       const traceEntry = computed.trace?.values.get(`traits.${key}`);
-      const source = traceEntry?.isAnchor
-        ? green("(anchor)")
-        : gray("(computed)");
+      const source = traceEntry?.isAnchor ? green("(anchor)") : gray("(computed)");
       console.log(`  ${key}: ${value} ${source}`);
     }
     console.log();
@@ -178,9 +168,7 @@ async function personCompute(
     console.log(bold("Computed Skills:"));
     for (const [key, value] of Object.entries(computed.skills)) {
       const traceEntry = computed.trace?.values.get(`skills.${key}`);
-      const source = traceEntry?.isAnchor
-        ? green("(anchor)")
-        : gray("(computed)");
+      const source = traceEntry?.isAnchor ? green("(anchor)") : gray("(computed)");
       console.log(`  ${key}: ${value} ${source}`);
     }
 

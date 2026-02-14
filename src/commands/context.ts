@@ -7,15 +7,7 @@ import { parseUri, resolveContext, searchContext } from "tyvi";
 import type { GlobalFlags } from "../mod.ts";
 import { EXIT } from "../mod.ts";
 import { resolveDevspace } from "../devspace.ts";
-import {
-  bold,
-  formatTable,
-  gray,
-  green,
-  output,
-  red,
-  STATUS,
-} from "../output.ts";
+import { bold, formatTable, gray, green, output, red, STATUS } from "../output.ts";
 
 /**
  * Handle context subcommands

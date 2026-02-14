@@ -81,9 +81,7 @@ const SUBCOMMANDS: Record<string, string[]> = {
 function generateBashCompletions(): string {
   const subcommandCases = Object.entries(SUBCOMMANDS)
     .map(([cmd, subs]) =>
-      `        ${cmd}) COMPREPLY=( $(compgen -W "${
-        subs.join(" ")
-      }" -- "$cur") ) ;;`
+      `        ${cmd}) COMPREPLY=( $(compgen -W "${subs.join(" ")}" -- "$cur") ) ;;`
     )
     .join("\n");
 
@@ -120,9 +118,7 @@ complete -F _tyvi_completions tyvi
 function generateZshCompletions(): string {
   const subcommandCases = Object.entries(SUBCOMMANDS)
     .map(([cmd, subs]) =>
-      `        ${cmd}) _values 'subcommand' ${
-        subs.map((s) => `'${s}'`).join(" ")
-      } ;;`
+      `        ${cmd}) _values 'subcommand' ${subs.map((s) => `'${s}'`).join(" ")} ;;`
     )
     .join("\n");
 
@@ -163,9 +159,7 @@ _tyvi "$@"
 
 function generateFishCompletions(): string {
   const commandCompletions = COMMANDS
-    .map((c) =>
-      `complete -c tyvi -n '__fish_use_subcommand' -a '${c}' -d '${c}'`
-    )
+    .map((c) => `complete -c tyvi -n '__fish_use_subcommand' -a '${c}' -d '${c}'`)
     .join("\n");
 
   const subcommandCompletions = Object.entries(SUBCOMMANDS)

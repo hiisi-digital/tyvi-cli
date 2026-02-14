@@ -177,9 +177,7 @@ async function guardsValidate(
     console.log();
 
     for (const issue of result.issues) {
-      const icon = issue.severity === "error"
-        ? red(STATUS.error)
-        : yellow(STATUS.warning);
+      const icon = issue.severity === "error" ? red(STATUS.error) : yellow(STATUS.warning);
       console.log(`  ${icon} [${issue.type}] ${issue.message}`);
       if (issue.fix) {
         console.log(gray(`    Fix: ${issue.fix}`));
@@ -190,9 +188,7 @@ async function guardsValidate(
   } catch (error) {
     console.error(
       red(
-        `${STATUS.error} Failed to validate: ${
-          error instanceof Error ? error.message : error
-        }`,
+        `${STATUS.error} Failed to validate: ${error instanceof Error ? error.message : error}`,
       ),
     );
     return EXIT.ERROR;
@@ -233,14 +229,10 @@ async function guardsStatus(
       `  Shell:   ${shellInfo.shell} (${shellInfo.rcFile ?? "no RC file"})`,
     );
     console.log(
-      `  Hooks:   ${
-        hooksInstalled ? green("installed") : gray("not installed")
-      }`,
+      `  Hooks:   ${hooksInstalled ? green("installed") : gray("not installed")}`,
     );
     console.log(
-      `  direnv:  ${
-        direnvAvailable ? green("available") : gray("not available")
-      }`,
+      `  direnv:  ${direnvAvailable ? green("available") : gray("not available")}`,
     );
 
     if (policy?.allowed_paths.length) {
@@ -252,9 +244,7 @@ async function guardsStatus(
   } catch (error) {
     console.error(
       red(
-        `${STATUS.error} Failed to get status: ${
-          error instanceof Error ? error.message : error
-        }`,
+        `${STATUS.error} Failed to get status: ${error instanceof Error ? error.message : error}`,
       ),
     );
     return EXIT.ERROR;

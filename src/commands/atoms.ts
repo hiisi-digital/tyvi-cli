@@ -3,14 +3,7 @@
  * @module
  */
 
-import {
-  loadExperience,
-  loadPhrases,
-  loadQuirks,
-  loadSkills,
-  loadStacks,
-  loadTraits,
-} from "tyvi";
+import { loadExperience, loadPhrases, loadQuirks, loadSkills, loadStacks, loadTraits } from "tyvi";
 import type { GlobalFlags } from "../mod.ts";
 import { EXIT } from "../mod.ts";
 import { resolveDevspace } from "../devspace.ts";

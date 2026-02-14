@@ -21,16 +21,7 @@ import type { GlobalFlags } from "../mod.ts";
 import { EXIT } from "../mod.ts";
 import { resolveDevspace } from "../devspace.ts";
 import { confirm, input } from "../prompts.ts";
-import {
-  bold,
-  formatTable,
-  gray,
-  green,
-  output,
-  red,
-  STATUS,
-  yellow,
-} from "../output.ts";
+import { bold, formatTable, gray, green, output, red, STATUS, yellow } from "../output.ts";
 
 // ============================================================================
 // init
@@ -70,9 +61,7 @@ export async function initCommand(
   } catch (error) {
     console.error(
       red(
-        `${STATUS.error} Failed to init: ${
-          error instanceof Error ? error.message : error
-        }`,
+        `${STATUS.error} Failed to init: ${error instanceof Error ? error.message : error}`,
       ),
     );
     return EXIT.ERROR;
@@ -144,9 +133,7 @@ export async function statusCommand(
         git: formatGitStatus(r.gitStatus),
         branch: r.currentBranch ?? "-",
         sync: r.ahead !== undefined
-          ? `${r.ahead ? yellow(`+${r.ahead}`) : ""}${
-            r.behind ? red(`-${r.behind}`) : ""
-          }`
+          ? `${r.ahead ? yellow(`+${r.ahead}`) : ""}${r.behind ? red(`-${r.behind}`) : ""}`
           : "-",
       })),
       [
@@ -462,9 +449,7 @@ async function repoAdd(
   } catch (error) {
     console.error(
       red(
-        `${STATUS.error} Failed to add repo: ${
-          error instanceof Error ? error.message : error
-        }`,
+        `${STATUS.error} Failed to add repo: ${error instanceof Error ? error.message : error}`,
       ),
     );
     return EXIT.ERROR;
@@ -583,9 +568,7 @@ export async function hintCommand(
     console.log(`  Root: ${devspace.rootPath}`);
     console.log(`  Lab: ${labPath}`);
     console.log(
-      `  Namespaces: ${
-        (devspace.config.devspace.namespaces?.paths ?? []).join(", ")
-      }`,
+      `  Namespaces: ${(devspace.config.devspace.namespaces?.paths ?? []).join(", ")}`,
     );
     console.log();
     console.log(bold("Quick commands:"));
@@ -667,9 +650,7 @@ async function repoRemove(
   } catch (error) {
     console.error(
       red(
-        `${STATUS.error} Failed to remove repo: ${
-          error instanceof Error ? error.message : error
-        }`,
+        `${STATUS.error} Failed to remove repo: ${error instanceof Error ? error.message : error}`,
       ),
     );
     return EXIT.ERROR;
