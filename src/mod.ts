@@ -8,6 +8,7 @@
  */
 
 import { applyNoColor, bold, outputError, red, STATUS } from "./output.ts";
+import { VERSION } from "./version.ts";
 import { personCommand } from "./commands/person.ts";
 import { memoryCommand } from "./commands/memory.ts";
 import { contextCommand } from "./commands/context.ts";
@@ -209,7 +210,7 @@ function versionCommand(
   _args: string[],
   _flags: GlobalFlags,
 ): Promise<number> {
-  console.log("tyvi-cli 0.1.0");
+  console.log(`tyvi-cli ${VERSION}`);
   return Promise.resolve(EXIT.SUCCESS);
 }
 
