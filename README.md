@@ -22,16 +22,16 @@ deno install -gA -n tyvi jsr:@hiisi/tyvi-cli
 ### Devspace Management
 
 ```bash
-tyvi init [path]             # Initialize a new devspace
+tyvi init [path]             # Initialize a new devspace (interactive)
 tyvi status                  # Show devspace status
-tyvi list [-s]               # List repos from inventory
-tyvi load <pattern>          # Load repos to lab (also --all, --namespace <ns>)
-tyvi unload <pattern>        # Unload repos from lab (also --all, --force)
-tyvi clone <pattern>         # Clone repos to staging (also --all, --namespace, --category)
-tyvi sync [--fetch]          # Sync devspace with inventory
-tyvi repo add <url>          # Add repo to inventory (--namespace, --name, --category)
-tyvi repo remove <name>      # Remove repo from inventory (--delete-files)
-tyvi migrate [-i path]       # Migrate ad-hoc directory into devspace (interactive)
+tyvi list                    # List repos from inventory
+tyvi load <pattern>          # Load repos to lab
+tyvi unload <pattern>        # Unload repos from lab
+tyvi clone <pattern>         # Clone repos to staging
+tyvi sync                    # Sync devspace with inventory
+tyvi repo add <url>          # Add repo to inventory
+tyvi repo remove <name>      # Remove repo from inventory
+tyvi migrate                 # Migrate the current directory into the devspace (interactive)
 ```
 
 ### People & Relationships
@@ -48,11 +48,11 @@ tyvi relationship log <person> <with> # Add relationship log entry
 ### Memory
 
 ```bash
-tyvi memory list [--person <id>] [--topic <topic>]    # List memories
-tyvi memory recall <person> [topic]                   # Recall memories
-tyvi memory record <person>                           # Record a new memory (interactive)
-tyvi memory reinforce <id> [reason]                   # Reinforce a memory
-tyvi memory prune                                     # Prune weak memories
+tyvi memory list                      # List memories
+tyvi memory recall <person> [topic]   # Recall memories
+tyvi memory record <person>           # Record a new memory (interactive)
+tyvi memory reinforce <id> [reason]   # Reinforce a memory
+tyvi memory prune                     # Prune weak memories
 ```
 
 ### Context & Atoms
@@ -80,6 +80,26 @@ tyvi root                      # Print devspace root path
 ```bash
 tyvi completions <shell>       # Generate shell completions (bash, zsh, fish)
 ```
+
+### Flags
+
+The parser recognises these and applies them to every command:
+
+```bash
+-h, --help        # show help
+-V, --version     # print the version
+-q, --quiet       # suppress non-essential output
+--json            # emit JSON instead of a table
+--no-color        # disable ANSI colors
+```
+
+`-v, --verbose` is accepted and has no effect: no command reads it.
+
+Per-command flags that the built-in help text still advertises (`-s`, `--all`, `--force`,
+`--namespace`, `--category`, `--name`, `--fetch`, `--delete-files`, `-i`, `--person`, `--topic`)
+do not work. The global parser consumes every flag before the command runs, so the command sees
+none of them. `tyvi load --all` exits 2 with "Missing pattern or --all flag", and `tyvi list -s`
+prints the full table.
 
 ## Architecture
 
@@ -126,7 +146,6 @@ deno task run <command>
 ## Related Packages
 
 - [`tyvi`](https://github.com/hiisi-digital/tyvi): core library (types, computation, devspace)
-- [`tyvi-mcp`](https://github.com/hiisi-digital/tyvi-mcp): MCP server wrapper for AI agents
 
 ## License
 
