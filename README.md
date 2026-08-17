@@ -5,11 +5,10 @@ CLI interface for tyvi devspace orchestration.
 ## Overview
 
 `tyvi-cli` is a thin command-line interface that delegates to the core `tyvi` library. It provides
-human-friendly commands for managing devspaces, people, relationships, memories, atoms, and
-context.
+human-friendly commands for managing devspaces, people, relationships, memories, atoms, and context.
 
-This package contains **only CLI logic**: argument parsing, output formatting, and user
-interaction. All actual functionality lives in the `tyvi` core library.
+This package contains **only CLI logic**: argument parsing, output formatting, and user interaction.
+All actual functionality lives in the `tyvi` core library.
 
 ## Installation
 
@@ -96,16 +95,16 @@ The parser recognises these and applies them to every command:
 `-v, --verbose` is accepted and has no effect: no command reads it.
 
 Per-command flags that the built-in help text still advertises (`-s`, `--all`, `--force`,
-`--namespace`, `--category`, `--name`, `--fetch`, `--delete-files`, `-i`, `--person`, `--topic`)
-do not work. The global parser consumes every flag before the command runs, so the command sees
-none of them. `tyvi load --all` exits 2 with "Missing pattern or --all flag", and `tyvi list -s`
-prints the full table.
+`--namespace`, `--category`, `--name`, `--fetch`, `--delete-files`, `-i`, `--person`, `--topic`) do
+not work. The global parser consumes every flag before the command runs, so the command sees none of
+them. `tyvi load --all` exits 2 with "Missing pattern or --all flag", and `tyvi list -s` prints the
+full table.
 
 ## Architecture
 
-`tyvi-cli` is a single layer over the core library: it parses arguments, calls the matching
-`tyvi` function, and formats the result for the terminal. Types, computation, people, memory,
-and devspace operations all live in `tyvi`.
+`tyvi-cli` is a single layer over the core library: it parses arguments, calls the matching `tyvi`
+function, and formats the result for the terminal. Types, computation, people, memory, and devspace
+operations all live in `tyvi`.
 
 ## Design Principles
 
