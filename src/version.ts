@@ -1,9 +1,9 @@
 /**
  * The CLI version.
  *
- * This mirrors the `version` field in deno.json. It is a constant rather than a read of the
- * manifest because deno.json is not part of the published file set, so importing it would
- * resolve at development time and fail for an installed package.
+ * This mirrors the `version` field in deno.json. Nothing derives one from the other at runtime,
+ * so a release edits both. `version.test.ts` fails when they drift, which is how 0.2.0 shipped
+ * to JSR reporting 0.1.0.
  *
  * @module
  */
