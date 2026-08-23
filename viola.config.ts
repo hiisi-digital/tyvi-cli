@@ -5,9 +5,9 @@
  * and file organization problems.
  */
 
-import { report, viola, when } from "jsr:@hiisi/viola@^0.3.0";
-import defaultLints from "jsr:@hiisi/viola-default-lints@^0.3.0";
-import tsGrammar from "jsr:@hiisi/viola-grammar-ts@^0.3.0";
+import { report, viola, when } from "jsr:@hiisi/viola@^0.3.1";
+import defaultLints from "jsr:@hiisi/viola-default-lints@^0.3.1";
+import tsGrammar from "jsr:@hiisi/viola-grammar-ts@^0.3.1";
 
 export default viola()
   .add(tsGrammar).as("ts")
